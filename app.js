@@ -1,8 +1,9 @@
 const Discord = require('discord.js');
 const client = new Discord.Client();
+const sql = require('sqlite');
+sql.open('./score.sqlite');
 const config = require('./config.json');
 const moment = require('moment');
-const fs = require("fs")
 
 client.on('ready', () => {
   console.log(`Logged in as ${client.user.username}!`);
@@ -23,10 +24,44 @@ client.on('guildMemberRemove', member => {
 
 client.on('message', msg => {
   if(msg.author.bot) return;
-  if(!msg.content.startsWith(config.prefix)) return;
+  if (msg.channel.type === 'dm') return;
 
+  sql.get(`SELECT * FROM scores WHERE userId ='${msg.author.id}'`).then(row => {
+    if (!row) { // Can't find the row.
+      sql.run('INSERT INTO scores (userId, points, level) VALUES (?, ?, ?)', [msg.author.id, 1, 0]);
+    } else { // Can find the row.
+      let curLevel = Math.floor(0.1 * Math.sqrt(row.points + 1));
+      if (curLevel > row.level) {
+        row.level = curLevel;
+        sql.run(`UPDATE scores SET points = ${row.points + 1}, level = ${row.level} WHERE userId = ${msg.author.id}`);
+        msg.reply(`You've leveled up to level **${curLevel}**! Ain't that dandy?`);
+      }
+      sql.run(`UPDATE scores SET points = ${row.points + 1} WHERE userId = ${msg.author.id}`);
+    }
+  }).catch(() => {
+    console.error;
+    sql.run('CREATE TABLE IF NOT EXISTS scores (userId TEXT, points INTEGER, level INTEGER)').then(() => {
+      sql.run('INSERT INTO scores (userId, points, level) VALUES (?, ?, ?)', [msg.author.id, 1, 0]);
+    });
+  });
+
+  if(!msg.content.startsWith(config.prefix)) return;
   const args = msg.content.substring(config.prefix.length).split(' ');
   const command = args.shift().toLowerCase();
+
+  if (command === 'level') {
+    sql.get(`SELECT * FROM scores WHERE userId ='${msg.author.id}'`).then(row => {
+      if (!row) return msg.reply('Your current level is 0');
+      msg.reply(`Your current level is ${row.level}`);
+    });
+  } else
+
+  if (command === 'points') {
+    sql.get(`SELECT * FROM scores WHERE userId ='${msg.author.id}'`).then(row => {
+      if (!row) return msg.reply('sadly you do not have any points yet!');
+      msg.reply(`you currently have ${row.points} points, good going!`);
+    });
+  }
 
   if (command === 'test') {
     msg.channel.sendMessage('No test command at this moment')
@@ -50,7 +85,10 @@ ${config.prefix}coinflip - Bot will flip a British £1 Sterling
 ${config.prefix}how-old - See how old your account is in days
 ${config.prefix}profile - See some information about yourself and your public profile on the server
 ${config.prefix}ssd-invite - Bot will give an invite link to the Soviet Space Dog discord
-${config.prefix}coming-soon - Bot will tell you what is being added to Rokkit in the next updates`)
+${config.prefix}coming-soon - Bot will tell you what is being added to Rokkit in the next updates
+${config.prefix}github - Bot will give a link to the Rokkit github repository
+${config.prefix}points - Bot will show your current points on the server
+${config.prefix}level - Bot will show your current level on the server`)
       .setThumbnail(`${client.users.get('284894725998379019').avatarURL.replace('.jpg', '.png')}`))
   }
 
@@ -177,10 +215,12 @@ You can find a list of commands with ${config.prefix}help.`)
 
         4. Role commands (manipulate roles, give, take, add, remove, new user roles, ect)
 
-        5. cont. from \'4\' server ranks and levels with linked roles
-
-        6. private room maker`)
+        5. Private room maker`)
       .setThumbnail(`${client.users.get('284894725998379019').avatarURL.replace('.jpg', '.png')}`))
+  }
+
+  if (command === 'github') {
+    msg.channel.sendMessage(`Here is the GitHub repository https://github.com/Samazer2/Rokkit`)
   }
 
 });
