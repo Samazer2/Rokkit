@@ -3,7 +3,9 @@ const client = new Discord.Client();
 const sql = require('sqlite');
 sql.open('./score.sqlite');
 const config = require('./config.json');
+const fs = require('fs');
 const moment = require('moment');
+const sherlock = require('sherlockjs');
 
 client.on('ready', () => {
   console.log(`Logged in as ${client.user.username}!`);
@@ -34,7 +36,7 @@ client.on('message', msg => {
       if (curLevel > row.level) {
         row.level = curLevel;
         sql.run(`UPDATE scores SET points = ${row.points + 1}, level = ${row.level} WHERE userId = ${msg.author.id}`);
-        msg.reply(`You've leveled up to level **${curLevel}**! Ain't that dandy?`);
+        msg.reply(`You've leveled up to level **${curLevel}**! Congrats`);
       }
       sql.run(`UPDATE scores SET points = ${row.points + 1} WHERE userId = ${msg.author.id}`);
     }
@@ -49,6 +51,13 @@ client.on('message', msg => {
   const args = msg.content.substring(config.prefix.length).split(' ');
   const command = args.shift().toLowerCase();
 
+  try {
+    let commandFile = require(`./commands/${command}.js`);
+    command.func(client, msg, args)
+  } catch (err) {
+    console.error(err);
+  }
+
   if (command === 'level') {
     sql.get(`SELECT * FROM scores WHERE userId ='${msg.author.id}'`).then(row => {
       if (!row) return msg.reply('Your current level is 0');
@@ -58,8 +67,8 @@ client.on('message', msg => {
 
   if (command === 'points') {
     sql.get(`SELECT * FROM scores WHERE userId ='${msg.author.id}'`).then(row => {
-      if (!row) return msg.reply('sadly you do not have any points yet!');
-      msg.reply(`you currently have ${row.points} points, good going!`);
+      if (!row) return msg.reply('you do not have any points yet!');
+      msg.reply(`you currently have ${row.points} points!`);
     });
   }
 
@@ -83,7 +92,7 @@ ${config.prefix}roll - Bot will roll a six sided dice
 ${config.prefix}8ball [Question] - The magic 8 ball will answer your question
 ${config.prefix}coinflip - Bot will flip a British £1 Sterling
 ${config.prefix}how-old - See how old your account is in days
-${config.prefix}profile - See some information about yourself and your public profile on the server
+${config.prefix}profile [@Mention]- See the mentioned users profile on the server
 ${config.prefix}ssd-invite - Bot will give an invite link to the Soviet Space Dog discord
 ${config.prefix}coming-soon - Bot will tell you what is being added to Rokkit in the next updates
 ${config.prefix}github - Bot will give a link to the Rokkit github repository
@@ -104,17 +113,20 @@ You can find a list of commands with ${config.prefix}help.`)
   }
 
   if (command === 'profile') {
-    let isBot = msg.author.bot ? 'is' : 'is not'
+    if (!msg.mentions.users.size) return msg.channel.sendMessage('Error: No mention found in message content');
+    let dude = msg.guild.member(msg.mentions.users.first())
+    let isBot = dude.user.bot ? 'bot' : 'user'
     msg.channel.sendEmbed(new Discord.RichEmbed()
-      .setTitle(`${msg.author.username}\'s profile`)
-      .setThumbnail(msg.author.avatarURL.replace('.jpg', '.png'))
+      .setTitle(`${dude.user.username}\'s profile`)
+      .setThumbnail(dude.user.avatarURL.replace('.jpg', '.png'))
       .setColor(msg.guild.member(client.user).highestRole.color)
       .setFooter('Bot created by Samazer - 25/02/2017', `${client.users.get('153175577040257025').avatarURL.replace('.jpg', '.png')}`)
-      .setDescription(`Account created on ${moment(msg.author.createdTimestamp).format('Do, MMM YYYY [at] h:mm a')}
-      ${msg.author.username}\'s discriminator is *#${msg.author.discriminator}*
-      ${msg.author.username} *${isBot}* a bot
-      ${msg.author.username}\'s status is **${msg.author.presence.status}**`)
-      )
+      .addField('Creation date:', `Account created on ${moment(dude.user.createdTimestamp).format('Do, MMM YYYY [at] h:mm a')}`, true)
+      .addField('Account type:', `${isBot}`, true)
+      .addField('Status:', `${dude.user.presence.status}`, true)
+      .addField('Highest role:', `${dude.highestRole}`, true)
+      .addField(`Joined ${msg.guild.name} on:`, `${moment(dude.joinedTimestamp).format('Do, MMM YYYY [at] h:mm a')}`, true)
+      .addField(`Days on ${msg.guild.name}:`, `Has been a member for ${Math.floor((Date.now() - dude.joinedTimestamp) / (60*60*24*1000))} days`, true))
   }
 
   if (command === 'avatar') {
@@ -187,10 +199,6 @@ You can find a list of commands with ${config.prefix}help.`)
     msg.channel.sendFile(side[rand], null, `The coin landed on ${sidename[rand]}`)
   }
 
-  if (command === 'ping') {
-    msg.channel.sendMessage(`Pong! Time taken \`${Date.now() - msg.createdTimestamp} ms\``)
-  }
-
   if (command === 'how-old') {
     msg.channel.sendMessage(`Your account was created ${Math.floor((Date.now() - msg.author.createdTimestamp) / (60*60*24*1000))} days ago`)
   }
@@ -211,16 +219,35 @@ You can find a list of commands with ${config.prefix}help.`)
 
         2. Changeable prefix for different servers
 
-        3. Reminders (Rokkit will take a reminder and a date and dm the user the reminder at whatever time they provide
+        3. Reminder managment
 
         4. Role commands (manipulate roles, give, take, add, remove, new user roles, ect)
 
-        5. Private room maker`)
+        5. Private room maker
+
+        6. Bugs found for Rokkit Bug Testers
+
+        7. Add google/youtube/image/emoji/ect searching
+
+        8. Message purging
+
+        9. Weather updates`)
       .setThumbnail(`${client.users.get('284894725998379019').avatarURL.replace('.jpg', '.png')}`))
   }
 
   if (command === 'github') {
     msg.channel.sendMessage(`Here is the GitHub repository https://github.com/Samazer2/Rokkit`)
+  }
+
+  if (command === 'remind') {
+    const s = sherlock.parse(msg.content);
+    const relative = s.startDate.getTime() - Date.now();
+    s.eventTitle = s.eventTitle.replace('>> remind me to', '');
+    msg.channel.sendMessage(`I will remind you to ${s.eventTitle} ${moment().add(relative, 'ms').fromNow()}.`);
+    setTimeout(() => {
+      let final = `**REMINDER:** ${s.eventTitle}`;
+      msg.author.sendMessage(final).catch(() => msg.channel.sendMessage(`${msg.author} ${final}`));
+    }, relative);
   }
 
 });
