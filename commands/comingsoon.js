@@ -22,9 +22,17 @@ module.exports = {
 
         8. Message purging
 
-        9. Weather updates`)
+        9. Weather updates
+
+        10. make this command automated so i can add and remove todos in chat, or make global todos for everyone
+
+        11. automated help menu
+
+        12. define command
+
+        13. translate command`)
       .setThumbnail(`${Client.bot.users.get('284894725998379019').avatarURL.replace('.jpg', '.png')}`))
   },
   args: 'There are no arguments for this command!',
-  help: `use: ${config.prefix}`,
+  help: `use: ${config.prefix}comingsoon`,
 }

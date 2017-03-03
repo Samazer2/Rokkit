@@ -4,7 +4,7 @@ const moment = require('moment');
 module.exports = {
 
   func: (Client, msg, args) => {
-    if (!msg.mentions.users.size) return msg.channel.sendMessage('Error: No mention found in message content');
+    if (!msg.mentions.users.size) return msg.channel.sendMessage(':warning: No mention found in message content');
     let dude = msg.guild.member(msg.mentions.users.first())
     let isBot = dude.user.bot ? 'bot' : 'user'
     msg.channel.sendEmbed(new Discord.RichEmbed()
