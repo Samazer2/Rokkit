@@ -1,8 +1,9 @@
+const config = require('../config.json');
 module.exports = {
 
-  func: (msg) => {
-    msg.channel.sendMessage(`Pong! WS Ping: \`${Math.round(msg.client.ping)} ms\` | HTTP Ping: \`${Date.now() - msg.createdTimestamp} ms\``);
+  func: (Client, msg, args) => {
+    msg.channel.sendMessage(`Pong! Here's the WS Ping: \`${Math.round(msg.client.ping)} ms\` and HTTP Ping: \`${Date.now() - msg.createdTimestamp} ms\``);
   },
-  args: '',
-  help: 'Recieve a Pong!',
+  args: 'There are no arguments for this command!',
+  help: `Recieve a Pong! use: ${config.prefix}ping`,
 }
