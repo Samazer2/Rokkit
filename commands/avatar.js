@@ -2,7 +2,7 @@ const config = require('../config.json');
 module.exports = {
 
   func: (Client, msg, args, config) => {
-    let attachment = msg.author.defaultAvatarURL.replace('.jpg', '.png')
+    let attachment = msg.author.displayAvatarURL.replace('.jpg', '.png')
     msg.channel.sendFile(attachment, 'avatar.png', `Here is your Avatar ${msg.author}`)
   },
   args: 'There are no arguments for this command!',
