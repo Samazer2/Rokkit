@@ -38,6 +38,6 @@ module.exports = {
       });
     });
   },
-  args: 'There are no arguments for this command!',
-  help: `use: ${config.prefix}`,
+  args: 'You can use \`points\` and \`level\` as arguments for this command',
+  help: `This command displays your server points or level on the server, use: ${config.prefix}score points`,
 }
