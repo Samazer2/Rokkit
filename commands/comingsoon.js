@@ -30,7 +30,11 @@ module.exports = {
 
         12. define command
 
-        13. translate command`)
+        13. translate command
+
+        14. be able to use >> avatar @mention
+
+        15. fix reminder no time / subject`)
       .setThumbnail(`${Client.bot.users.get('284894725998379019').avatarURL.replace('.jpg', '.png')}`))
   },
   args: 'There are no arguments for this command!',
