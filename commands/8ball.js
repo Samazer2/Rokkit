@@ -1,7 +1,7 @@
 const config = require('../config.json');
 module.exports = {
 
-  func: (Client, msg, args) => {
+  func: (client, msg, args) => {
     var reply = new Array();
     reply[1] = 'It is certain';
     reply[2] = 'It is decidedly so';

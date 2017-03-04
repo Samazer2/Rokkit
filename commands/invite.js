@@ -1,7 +1,7 @@
 const config = require('../config.json');
 module.exports = {
 
-  func: (Client, msg, args) => {
+  func: (client, msg, args) => {
     msg.channel.sendMessage('Use this link to join the server,  https://discord.gg/DBZx7XS')
   },
   args: 'There are no arguments for this command!',

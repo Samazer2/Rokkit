@@ -2,10 +2,10 @@ const config = require('../config.json');
 const Discord = require('discord.js');
 module.exports = {
 
-  func: (Client, msg, args) => {
+  func: (client, msg, args) => {
     msg.channel.sendEmbed(new Discord.RichEmbed()
       .setTitle('Coming soon to Rokkit')
-      .setColor(msg.guild.member(Client.bot.user).highestRole.color)
+      .setColor(msg.guild.member(client.user).highestRole.color)
       .setDescription(`1. Customisable Bio in >> profile
 
         2. Changeable prefix for different servers
@@ -26,16 +26,14 @@ module.exports = {
 
         10. make this command automated so i can add and remove todos in chat, or make global todos for everyone
 
-        11. automated help menu
+        11. define command
 
-        12. define command
+        12. translate command
 
-        13. translate command
+        13. be able to use >> avatar @mention
 
-        14. be able to use >> avatar @mention
-
-        15. fix reminder no time / subject`)
-      .setThumbnail(`${Client.bot.users.get('284894725998379019').avatarURL.replace('.jpg', '.png')}`))
+        14. fix reminder no time / subject`)
+      .setThumbnail(`${client.users.get('284894725998379019').avatarURL.replace('.jpg', '.png')}`))
   },
   args: 'There are no arguments for this command!',
   help: `use: ${config.prefix}comingsoon`,

@@ -28,11 +28,6 @@ client.on('message', msg => {
   const args = msg.content.substring(config.prefix.length).split(' ');
   const command = args.shift().toLowerCase();
 
-  Client = {
-    config: require('./config.json'),
-    bot: client
-  }
-
   let commandsList = fs.readdirSync('./commands/');
   Client.commands = {};
   for (i = 0; i < commandsList.length; i++) {
@@ -49,7 +44,7 @@ client.on('message', msg => {
     if (args.includes('args')) {
       return msg.channel.sendMessage(Client.commands[command].args);
     }
-    Client.commands[command].func(Client, msg, args);
+    Client.commands[command].func(client, msg, args);
   }
 
 });

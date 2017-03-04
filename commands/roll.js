@@ -1,7 +1,7 @@
 const config = require('../config.json');
 module.exports = {
 
-  func: (Client, msg, args) => {
+  func: (client, msg, args) => {
     var dieSide = new Array();
     dieSide[1] = 'http://i.imgur.com/AM9em0O.png'
     dieSide[2] = 'http://i.imgur.com/2um583f.png'

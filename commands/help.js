@@ -3,7 +3,7 @@ const config = require('../config.json');
 const fs = require('fs');
 module.exports = {
 
-  func: (Client, msg, args) => {
+  func: (client, msg, args) => {
     let commandsList = fs.readdirSync('./commands/');
     commandsList.sort()
     let desc = "";
@@ -12,9 +12,9 @@ module.exports = {
     }
     msg.channel.sendEmbed(new Discord.RichEmbed()
       .setTitle('Rokkit Command List')
-      .setColor(msg.guild.member(Client.bot.user).highestRole.color)
+      .setColor(msg.guild.member(client.user).highestRole.color)
       .setDescription(desc)
-      .setThumbnail(`${Client.bot.users.get('284894725998379019').avatarURL.replace('.jpg', '.png')}`)
+      .setThumbnail(`${client.users.get('284894725998379019').avatarURL.replace('.jpg', '.png')}`)
       .setFooter('Type \'help\' after any of these commands for more info and \'args\' for the arguments'))
   },
   args: 'There are no arguments for this command!',

@@ -1,7 +1,7 @@
 const config = require('../config.json');
 module.exports = {
 
-  func: (Client, msg, args) => {
+  func: (client, msg, args) => {
     msg.channel.sendMessage(`Here is the GitHub repository https://github.com/Samazer2/Rokkit`)
   },
   args: 'There are no arguments for this command!',

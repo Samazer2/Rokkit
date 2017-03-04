@@ -3,7 +3,7 @@ const sherlock = require('sherlockjs');
 const moment = require('moment');
 module.exports = {
 
-  func: (Client, msg, args) => {
+  func: (client, msg, args) => {
     const s = sherlock.parse(msg.content);
     const relative = s.startDate.getTime() - Date.now();
     s.eventTitle = s.eventTitle.replace('>> remind me to', '');
