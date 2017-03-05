@@ -4,8 +4,8 @@ const moment = require('moment');
 module.exports = {
 
   func: (client, msg, args) => {
-    if (!msg.mentions.users.size) return msg.channel.sendMessage(':warning: No mention found in message content');
-    let dude = msg.guild.member(msg.mentions.users.first())
+    if (msg.mentions.users.size) var dude = msg.guild.member(msg.mentions.users.first())
+    else var dude = msg.guild.member(msg.author)
     let isBot = dude.user.bot ? 'bot' : 'user'
     msg.channel.sendEmbed(new Discord.RichEmbed()
       .setTitle(`${dude.user.username}\'s profile`)
@@ -19,6 +19,6 @@ module.exports = {
       .addField(`Joined ${msg.guild.name} on:`, `${moment(dude.joinedTimestamp).format('Do, MMM YYYY [at] h:mm a')}`, true)
       .addField(`Days on ${msg.guild.name}:`, `Has been a member for ${Math.floor((Date.now() - dude.joinedTimestamp) / (60*60*24*1000))} days`, true))
   },
-  args: 'You should put the argument as a @mention of the user who\'s profile you want to see',
-  help: `This command will display a profile of the specified user with some info about them, use: ${config.prefix}profile @Samazer#1625`,
+  args: 'Add a mention at the end to get another users profile',
+  help: `This command will display a profile of the user with some info about them, use: ${config.prefix}profile`,
 }

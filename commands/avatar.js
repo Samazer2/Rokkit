@@ -12,6 +12,6 @@ module.exports = {
     }
     msg.channel.sendFile(attachment, 'avatar.png', reply)
   },
-  args: 'There are no arguments for this command!',
+  args: 'Add a mention at the end to get another users avatar',
   help: `This command will upload a .png of your avatar, use: ${config.prefix}avatar`,
 }

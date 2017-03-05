@@ -4,19 +4,27 @@ sql.open('./score.sqlite');
 module.exports = {
 
   func: (client, msg, args) => {
+    if (msg.mentions.users.size) {
+      var dude = msg.guild.member(msg.mentions.users.first()).user
+      var reply = `${msg.guild.member(msg.mentions.users.first()).user.username}\'s`
+    }
+    else {
+      var dude = msg.author
+      var reply = 'Your'
+    }
     if (args.includes('level')) {
-        sql.get(`SELECT * FROM scores WHERE userId ='${msg.author.id}'`).then(row => {
-          if (!row) return msg.reply('Your current level is 0');
-          msg.reply(`Your current level is ${row.level}`);
-        });
-      }
+      sql.get(`SELECT * FROM scores WHERE userId ='${dude.id}'`).then(row => {
+        if (!row) return msg.reply('Your current level is 0');
+        msg.reply(`${reply} current level is ${row.level}`);
+      });
+    }
 
-      if (args.includes('points')) {
-        sql.get(`SELECT * FROM scores WHERE userId ='${msg.author.id}'`).then(row => {
-          if (!row) return msg.reply('you do not have any points yet!');
-          msg.reply(`you currently have ${row.points} points!`);
-        });
-      }
+    if (args.includes('points')) {
+      sql.get(`SELECT * FROM scores WHERE userId ='${dude.id}'`).then(row => {
+        if (!row) return msg.reply('you do not have any points yet!');
+        msg.reply(`${reply} current points are ${row.points}!`);
+      });
+    }
   },
   onmsg: (msg) => {
     sql.get(`SELECT * FROM scores WHERE userId ='${msg.author.id}'`).then(row => {
