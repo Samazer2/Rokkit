@@ -19,32 +19,34 @@ client.on('guildMemberRemove', member => {
 });
 
 client.on('message', msg => {
+  delete require.cache[require.resolve(`./serverlog.js`)];
+  require(`./serverlog.js`).log(msg, client);
   if(msg.author.bot) return;
   if (msg.channel.type === 'dm') return;
 
-  require(`./commands/score.js`).onmsg(msg);
+  require(`./commands/score.js`).onmsg(msg, client);
 
   if(!msg.content.startsWith(config.prefix)) return;
   const args = msg.content.substring(config.prefix.length).split(' ');
   const command = args.shift().toLowerCase();
 
   let commandsList = fs.readdirSync('./commands/');
-  Client.commands = {};
+  client.commands = {};
   for (i = 0; i < commandsList.length; i++) {
     let item = commandsList[i];
     if (item.endsWith('.js')) {
         delete require.cache[require.resolve(`./commands/${item}`)];
-        Client.commands[item.slice(0, -3)] = require(`./commands/${item}`);
+        client.commands[item.slice(0, -3)] = require(`./commands/${item}`);
     }
   }
-  if (command in Client.commands) {
+  if (command in client.commands) {
     if (args.includes('help')) {
-      return msg.channel.sendMessage(Client.commands[command].help);
+      return msg.channel.sendMessage(client.commands[command].help);
     }
     if (args.includes('args')) {
-      return msg.channel.sendMessage(Client.commands[command].args);
+      return msg.channel.sendMessage(client.commands[command].args);
     }
-    Client.commands[command].func(client, msg, args);
+    client.commands[command].func(client, msg, args);
   }
 
 });
