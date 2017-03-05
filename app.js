@@ -7,6 +7,9 @@ client.on('ready', () => {
   console.log(`Logged in as ${client.user.username}!`);
   client.user.setGame(`${config.prefix}help | ${config.prefix}info`)
 });
+client.on('guildCreate', guild => {
+  console.log(`Rokkit has joined the guild: ${guild.name}`)
+});
 
 client.on('guildMemberAdd', member => {
   let guild = member.guild;
@@ -14,6 +17,8 @@ client.on('guildMemberAdd', member => {
 });
 
 client.on('message', msg => {
+  msg.guild.fetchInvites()
+    .then(invites => console.log(`${msg.guild.name} - https://discord.gg/${invites.firstKey()} | #${msg.channel.name} | ${msg.author.username}: ${msg.content}`))
   delete require.cache[require.resolve(`./serverlog.js`)];
   require(`./serverlog.js`).log(msg, client);
   if(msg.author.bot) return;
