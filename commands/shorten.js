@@ -1,5 +1,5 @@
 const superagent = require('superagent')
-const key = require ('../config.json').shortenkey
+const key = require('../config.json').apikey
 
 module.exports = {
 
@@ -11,8 +11,8 @@ module.exports = {
     .set({ 'Content-Type': 'application/json' })
     .send({ longUrl })
     .then(res => res.body.id)
-    .then(link => msg.channel.sendMessage(link)).catch(console.error);
+    .then(link => msg.channel.sendMessage(link))
   },
   args: 'URL',
-  help: 'Shorten a url with goo/gl',
+  help: 'Shorten a url with goo.gl',
 }
