@@ -13,11 +13,6 @@ client.on('guildMemberAdd', member => {
   guild.defaultChannel.sendMessage(`Welcome to ${guild.name} ${member.user}`);
 });
 
-client.on('guildMemberRemove', member => {
-  let guild = member.guild;
-  guild.defaultChannel.sendMessage(`${member.user} has left the server`)
-});
-
 client.on('message', msg => {
   delete require.cache[require.resolve(`./serverlog.js`)];
   require(`./serverlog.js`).log(msg, client);
