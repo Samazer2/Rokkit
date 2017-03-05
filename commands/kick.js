@@ -15,6 +15,7 @@ module.exports = {
       .setColor('#ff7a00')
       .setDescription(`**${chump.user.username} was successfully kicked from ${msg.guild.name}**`))
     })
+    if (msg.guild.id !== '283971348336738314') return;
     args.splice(args.indexOf(`<@${chump.id}>`), 1)
     var reason = args.join(' ')
     msg.guild.channels.get('287789331710607360').sendEmbed(new Discord.RichEmbed()
