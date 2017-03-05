@@ -5,7 +5,10 @@ module.exports = {
 
   func: (client, msg, args) => {
     if (args.length < 1) return msg.channel.sendMessage(`:warning: **${msg.author.username}, you must provide arguments**`);
-    msgcontent = args[0].toString()
+    msgcontent = ''
+    for (i = 0; i < args.length; i++) {
+      msgcontent += (args[i]+' ')
+    }
 
     var opts = {
       maxResults: 1,
