@@ -6,7 +6,7 @@ module.exports = {
   func: (client, msg, args) => {
     let commandsList = fs.readdirSync('./commands/');
     commandsList.sort()
-    let desc = "";
+    let desc = '';
     for (i = 0; i < commandsList.length; i++) {
       desc += (config.prefix + commandsList[i].replace('.js', '')+'\n')
     }
