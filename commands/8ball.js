@@ -24,7 +24,7 @@ module.exports = {
     reply[19] = 'Outlook not so good';
     reply[20] = 'Very doubtful';
     var rand = 1 + Math.floor(Math.random() * 20);
-    msg.channel.sendMessage(reply[rand])
+    msg.channel.sendMessage(`:crystal_ball: ${reply[rand]}`)
   },
   args: 'Ask a question in the arguments',
   help: `Ask the magic 8ball a yes/no question and it will see the answer, use: ${config.prefix}8ball [question]`,
