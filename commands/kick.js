@@ -11,16 +11,18 @@ module.exports = {
     if (!msg.guild.member(client.user).hasPermission('KICK_MEMBERS')) return msg.channel.sendMessage(`:warning: **${msg.author.username}, I don't have the permissions to kick users**`)
 
     chump.kick().then(member => {
-      msg.channel.sendMessage(`**${msg.mentions.users.first()} was successfully kicked from ${msg.guild.name}**`)
+      msg.channel.sendsendEmbed(new Discord.RichEmbed()
+      .setColor('#ff7a00')
+      .setDescription(`**${chump.user.username} was successfully kicked from ${msg.guild.name}**`))
     })
-    args.splice(args.indexOf(`<@${msg.mentions.users.first().id}>`), 1)
+    args.splice(args.indexOf(`<@${chump.id}>`), 1)
     var reason = args.join(' ')
     msg.guild.channels.get('287789331710607360').sendEmbed(new Discord.RichEmbed()
     .setDescription(`**Member:** ${chump.user.username}#${chump.user.discriminator}
       **Action:** Kicked
       **Reason:** ${reason}`)
     .setAuthor(`${msg.author.username}#${msg.author.discriminator}`, msg.author.displayAvatarURL.replace('.jpg', '.png'))
-    .setColor(msg.member.highestRole.color)
+    .setColor('#ff7a00')
     .setTimestamp())
   },
   args: '@user, reason',

@@ -11,16 +11,18 @@ module.exports = {
     if (!msg.guild.member(client.user).hasPermission('BAN_MEMBERS')) return msg.channel.sendMessage(`:warning: **${msg.author.username}, I don't have the permissions to ban users**`);
 
     chump.ban().then(member => {
-      msg.channel.sendMessage(`**${msg.mentions.users.first()} was successfully banned from ${msg.guild.name}**`)
+      msg.channel.sendEmbed(new Discord.RichEmbed()
+      .setColor('#ff0000')
+      .setDescription(`**${chump.user.username} was successfully banned from ${msg.guild.name}**`))
     })
-    args.splice(args.indexOf(`<@${msg.mentions.users.first().id}>`), 1)
+    args.splice(args.indexOf(`<@${chump.id}>`), 1)
     var reason = args.join(' ')
     msg.guild.channels.get('287789331710607360').sendEmbed(new Discord.RichEmbed()
     .setDescription(`**Member:** ${chump.user.username}#${chump.user.discriminator}
       **Action:** Banned
       **Reason:** ${reason}`)
     .setAuthor(`${msg.author.username}#${msg.author.discriminator}`, msg.author.displayAvatarURL.replace('.jpg', '.png'))
-    .setColor(msg.member.highestRole.color)
+    .setColor('#ff0000')
     .setTimestamp())
   },
   args: '@user, reason',
