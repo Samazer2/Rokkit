@@ -1,6 +1,6 @@
 {
   "name": "rokkit",
-  "version": "1.2.2",
+  "version": "1.2.5",
   "description": "A multipurpose bot for the Soviet Space Dogs discord server",
   "main": "app.js",
   "scripts": {
