@@ -2,9 +2,15 @@ const Discord = require('discord.js');
 const client = new Discord.Client();
 const fs = require('fs');
 const config = require('./config.json');
+const Table = require('cli-table2');
 
 client.on('ready', () => {
   console.log(`Logged in as ${client.user.username}!`);
+  var table = new Table({
+         head: ['Guilds', 'Channels', 'Users']
+    });
+    table.push([client.guilds.size, client.channels.size, client.users.size]);
+  console.log(table.toString())
   client.user.setGame(`${config.prefix}help | ${config.prefix}info`)
 });
 client.on('guildCreate', guild => {
