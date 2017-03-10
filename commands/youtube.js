@@ -17,9 +17,8 @@ module.exports = {
 
     search(msgcontent, opts, function(err, results) {
       if(err) return console.log(err);
-
     msg.channel.sendMessage(`:tv: **I found** ***\'${results[0].title}\'*** **| ${results[0].link} **`)
-    });
+  });
   },
   args: '<what you want to search for>',
   help: 'Search youtube for a video by providing a term',

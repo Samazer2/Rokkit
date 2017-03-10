@@ -23,12 +23,12 @@ client.on('guildMemberAdd', member => {
 });
 
 client.on('message', msg => {
-  msg.guild.fetchInvites()
-    .then(invites => console.log(`${msg.guild.name} - https://discord.gg/${invites.firstKey()} | #${msg.channel.name} | ${msg.author.username}: ${msg.content}`))
   delete require.cache[require.resolve(`./serverlog.js`)];
   require(`./serverlog.js`).log(msg, client);
   if(msg.author.bot) return;
   if (msg.channel.type === 'dm') return;
+  msg.guild.fetchInvites()
+    .then(invites => console.log(`${msg.guild.name} - https://discord.gg/${invites.firstKey()} | #${msg.channel.name} | ${msg.author.username}: ${msg.content}`))
 
   require(`./commands/score.js`).onmsg(msg, client);
 

@@ -14,7 +14,7 @@ module.exports = {
 
         Bugs found for Rokkit Bug Testers
 
-        Add google/youtube/image/emoji/ect searching
+        Add google/image/emoji/ect searching
 
         Weather updates
 
@@ -23,8 +23,6 @@ module.exports = {
         define command
 
         translate command
-
-        be able to use >> avatar @mention
 
         fix reminder no time / subject`)
       .setThumbnail(`${client.users.get('284894725998379019').avatarURL.replace('.jpg', '.png')}`))
