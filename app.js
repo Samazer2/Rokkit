@@ -27,8 +27,8 @@ client.on('message', msg => {
   require(`./serverlog.js`).log(msg, client);
   if(msg.author.bot) return;
   if (msg.channel.type === 'dm') return;
-  msg.guild.fetchInvites()
-    .then(invites => console.log(`${msg.guild.name} - https://discord.gg/${invites.firstKey()} | #${msg.channel.name} | ${msg.author.username}: ${msg.content}`))
+  /*msg.guild.fetchInvites()
+    .then(invites => console.log(`${msg.guild.name} - https://discord.gg/${invites.firstKey()} | #${msg.channel.name} | ${msg.author.username}: ${msg.content}`))*/
 
   require(`./commands/score.js`).onmsg(msg, client);
 

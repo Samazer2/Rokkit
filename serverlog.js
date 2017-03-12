@@ -6,6 +6,7 @@ module.exports = {
     if (msg.channel.type === 'dm' || msg.channel.type === 'group') return;
     if (msg.guild.id !== '283971348336738314') return;
     if (msg.channel.id === '287632630940172289' || msg.channel.id === '284381476860985346' || msg.channel.id === '287245026747219968') return;
+    if (msg.embeds.length > 0) return msg.guild.channels.get('287632630940172289').sendMessage(`${msg.author.username} sent an embed in #${msg.channel.name}`);
 
     msg.guild.channels.get('287632630940172289').sendEmbed(new Discord.RichEmbed()
     .setDescription(msg.content)
@@ -24,7 +25,7 @@ module.exports = {
       msg.guild.channels.get('287632630940172289').sendMessage(`**${msg.author.username} also sent these attachments: **`+attachmentsStr)
     }
 
-    if (msg.embeds.length > 0) {
+    /*if (msg.embeds.length > 0) {
       msg.guild.channels.get('287632630940172289').sendMessage('**The user also sent an embed: **')
       msg.guild.channels.get('287632630940172289').sendEmbed(new Discord.RichEmbed()
       .setAuthor(msg.embeds[0].author)
@@ -34,6 +35,6 @@ module.exports = {
       .setThumbnail(msg.embeds[0].thumbnail)
       .setTitle(msg.embeds[0].title)
       .setURL(msg.embeds[0].url))
-    }
+    }*/
   }
 }
